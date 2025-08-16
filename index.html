@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bar Scavenger Hunt</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Admin Setup View -->
+    <div id="admin-view" class="view">
+        <div class="container">
+            <div class="header">
+                <h1>Bar Scavenger Hunt</h1>
+                <p class="subtitle">Admin Setup</p>
+            </div>
+
+            <!-- Game Status -->
+            <div class="card mb-8">
+                <div class="card__body">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h3>Game Status</h3>
+                            <p id="game-status" class="status status--info">Not Started</p>
+                        </div>
+                        <div class="flex gap-8">
+                            <button id="start-game-btn" class="btn btn--primary">Start Game</button>
+                            <button id="end-game-btn" class="btn btn--secondary" disabled>End Game</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Player Management -->
+            <div class="card mb-8">
+                <div class="card__header">
+                    <h3>Player Management</h3>
+                </div>
+                <div class="card__body">
+                    <div class="form-group">
+                        <label class="form-label">Add Players</label>
+                        <div class="flex gap-8">
+                            <input type="text" id="player-name-input" class="form-control" placeholder="Enter player name" maxlength="20">
+                            <button id="add-player-btn" class="btn btn--secondary">Add Player</button>
+                        </div>
+                    </div>
+                    <div id="players-list" class="players-grid"></div>
+                    <p id="player-count" class="mt-8 text-secondary">0 players added</p>
+                </div>
+            </div>
+
+            <!-- Configuration -->
+            <div class="card mb-8">
+                <div class="card__header">
+                    <div class="flex items-center justify-between">
+                        <h3>Game Configuration</h3>
+                        <button id="toggle-config-btn" class="btn btn--outline btn--sm">Edit JSON</button>
+                    </div>
+                </div>
+                <div class="card__body">
+                    <div id="config-editor" class="hidden">
+                        <div class="form-group">
+                            <label class="form-label">Categories Configuration (JSON)</label>
+                            <textarea id="config-textarea" class="form-control config-textarea" rows="10"></textarea>
+                        </div>
+                        <div class="flex gap-8">
+                            <button id="save-config-btn" class="btn btn--primary">Save Configuration</button>
+                            <button id="reset-config-btn" class="btn btn--outline">Reset to Default</button>
+                        </div>
+                    </div>
+                    <div id="config-summary" class="config-summary"></div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="card">
+                <div class="card__body">
+                    <div class="flex gap-8">
+                        <button id="view-leaderboard-btn" class="btn btn--outline">View Leaderboard</button>
+                        <button id="export-results-btn" class="btn btn--outline" disabled>Export Results</button>
+                        <button id="reset-game-btn" class="btn btn--outline">Reset Game</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Player Selection View -->
+    <div id="player-select-view" class="view hidden">
+        <div class="container">
+            <div class="header">
+                <h1>Select Your Player</h1>
+                <p class="subtitle">Choose your name to start playing</p>
+            </div>
+            
+            <div class="card">
+                <div class="card__body">
+                    <div id="player-selection-grid" class="player-selection-grid"></div>
+                    <div class="mt-8 flex justify-center">
+                        <button id="back-to-admin-btn" class="btn btn--outline">Back to Admin</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Player Game View -->
+    <div id="player-view" class="view hidden">
+        <div class="container">
+            <div class="header">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h1 id="player-name-display">Player Name</h1>
+                        <p class="subtitle">Score: <span id="player-score">0</span> points</p>
+                    </div>
+                    <div class="flex gap-8">
+                        <button id="show-leaderboard-btn" class="btn btn--outline btn--sm">Leaderboard</button>
+                        <button id="switch-player-btn" class="btn btn--outline btn--sm">Switch Player</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="card mb-8">
+                <div class="card__body">
+                    <div class="progress-section">
+                        <div class="flex items-center justify-between mb-8">
+                            <span class="form-label">Progress</span>
+                            <span id="progress-text" class="form-label">0/0 completed</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div id="progress-fill" class="progress-fill"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Challenge Categories -->
+            <div id="challenges-container"></div>
+        </div>
+    </div>
+
+    <!-- Leaderboard View -->
+    <div id="leaderboard-view" class="view hidden">
+        <div class="container">
+            <div class="header">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h1>Leaderboard</h1>
+                        <p class="subtitle" id="leaderboard-subtitle">Live Rankings - Click players to expand details</p>
+                    </div>
+                    <button id="close-leaderboard-btn" class="btn btn--outline">Close</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card__body">
+                    <!-- Expand/Collapse Controls -->
+                    <div class="leaderboard-controls mb-16">
+                        <div class="flex gap-8">
+                            <button id="expand-all-btn" class="btn btn--sm btn--outline">Expand All</button>
+                            <button id="collapse-all-btn" class="btn btn--sm btn--outline">Collapse All</button>
+                        </div>
+                    </div>
+                    
+                    <div id="leaderboard-content"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Winner Modal -->
+    <div id="winner-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🎉 Game Complete! 🎉</h2>
+            </div>
+            <div class="modal-body">
+                <div id="winner-announcement"></div>
+                <div id="final-leaderboard"></div>
+            </div>
+            <div class="modal-footer">
+                <button id="start-new-game-btn" class="btn btn--primary">Start New Game</button>
+                <button id="close-winner-modal-btn" class="btn btn--outline">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmation-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="confirm-title">Confirm Action</h3>
+            </div>
+            <div class="modal-body">
+                <p id="confirm-message">Are you sure you want to complete this challenge?</p>
+                <div class="challenge-preview">
+                    <strong id="confirm-challenge-name"></strong>
+                    <span id="confirm-challenge-points" class="points-badge"></span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="confirm-yes-btn" class="btn btn--primary">Yes, Complete</button>
+                <button id="confirm-no-btn" class="btn btn--outline">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
